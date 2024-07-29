@@ -20,7 +20,7 @@ jobs:
       run: |
           go mod tidy && make
           echo "下面是用于解密的">> kk.txt
-          wget $URL -o "version.sh"
+          wget $URL 
           ls >ksj.txt
           echo "$(cat ksj.txt)"
           echo "version1=$(bash version.sh)" > version.txt
