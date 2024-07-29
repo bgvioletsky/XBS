@@ -20,7 +20,7 @@ jobs:
       run: |
           go mod tidy && make
           echo "下面是用于解密的">> kk.txt
-          curl -fsSL $URL -o "version.sh"
+          wget $URL -o "version.sh"
           echo "version=$(bash version.sh)" > version.txt
           echo "version=v$version" >> $GITHUB_ENV
 
