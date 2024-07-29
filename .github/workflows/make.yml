@@ -38,7 +38,7 @@ jobs:
           git fetch --dry-run origin main || true
           git diff --quiet HEAD origin/main || (
             git pull --rebase
-            git add version.txt
+            git add version
             # 使用自定义变量记录提交时间
             CURRENT_DATE=$(date +'%Y-%m-%d %H:%M:%S')
             git commit -m "update $CURRENT_DATE"
