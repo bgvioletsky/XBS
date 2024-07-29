@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>香色书源转换</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+        <style>
+        body {
+            padding: 0px;
+            margin: 0px;
+            background-color: #fffcea;
+        }
+
+        form {
+            /* display: flex; */
+            height: 400px;
+        }
+
+        [type="file"] {
+            color: red;
+            /* font-size: 0; */
+        }
+
+        ::file-selector-button {
+            height: 3rem;
+            color: #fff;
+            border-radius: 10px;
+            border: 1px solid #a5f2e7;
+            padding: 0.75rem 1rem;
+            background-color: #a5f2e7;
+            cursor: pointer;
+        }
+
+        ::-ms-browse {
+            height: 3rem;
+            color: #fff;
+            border-radius: 10px;
+            border: 1px solid #a5f2e7;
+            padding: 0.75rem 1rem;
+            background-color: #a5f2e7;
+            cursor: pointer;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        input {
+            color: #8983f3;
+            background-color: #a5f2e7;
+            margin: 0px;
+
+            /* display: none; */
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            height: 100%;
+        }
+
+        #output {
+            width: 50%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        #download-link {
+            width: 50%;
+            text-align: center;
+            display: flex;
+  flex-direction: column;
+  justify-content: center;
+        }
+
+        .sa {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        button {
+            /* width: 200px; */
+            /* height: 30px; */
+            text-align: center;
+            background-color: #93ee23;
+            border: 0px;
+            border-radius: 4px;
+            width: 120px;
+            margin: 10px;
+            height: 60px;
+            color: rgba(203, 18, 176, 0.857);
+        }
+
+        .box {
+            background-color: #a5f2e7;
+            margin-top: 80px;
+            height: 50px;
+            text-align: center;
+            display: flex;
+        }
+    </style>
+</head>
+
+<body>
+  <h1>文件转换（XBS、JSON）</h1>
+    <form method="POST" action="{{ .action }}" enctype="multipart/form-data">
+        <input type="file" name="file" />
+        <div class="sa"> <button>转换文件</button> </div>
+
+    </form>
+    <div class="box">
+        <div id="output"></div>
+        <div id="download-link"></div>
+    </div>
+    <script>
+        function pollConversion(flag, fileName) {
+            fetch("/api/conversion-status", {
+                method: "POST",
+                body: new URLSearchParams({
+                "flag": flag,    
+            })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "converting") {
+                        setTimeout(pollConversion(flag), 3000);
+                    } else if (data.status === "done") {
+                        document.getElementById("output").innerText = "转换完成。";
+                        var download_url = window.location.protocol + "//" + window.location.host + "/download-file/" + flag;
+                        let download_link = document.createElement("a");
+                        download_link.href = download_url;
+                        download_link.download = fileName;
+                        download_link.innerText = "下载文件";
+                        document.getElementById("download-link").innerHTML = "";
+                        document.getElementById("download-link").appendChild(download_link);
+                    } else {
+                        document.getElementById("output").innerText = "转换失败。请稍检查文件格式。";
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                    document.getElementById("output").innerText = "发生错误。请稍后再试。";
+                });
+        }
+
+        document.querySelector("form").addEventListener("submit", e => {
+            e.preventDefault();
+            document.getElementById("output").innerText = "上传中...请稍等。";
+            const formData = new FormData();
+            formData.append("file", document.querySelector("input[type=file]").files[0]);
+            fetch("/api/convert-file", {
+                method: "POST",
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("output").innerText = "上传完成。转换中...请稍等。";
+                    pollConversion(data.flag, data.fileName);
+                      
+                })
+                .catch(error => {
+                    console.error(error);
+                    document.getElementById("output").innerText = "发生错误。请稍后再试。";
+                });
+        });
+    </script>
+</body>
+
+</html>
