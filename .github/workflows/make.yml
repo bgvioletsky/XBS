@@ -43,22 +43,23 @@ jobs:
           #  echo "$NEW_VERSION" > version.txt
            echo "version=mac_v0.0.1" >> $GITHUB_ENV
 
-    # - name: commit
-    #   env:
-    #     EMAIL: ${{ secrets.EMAIL }}
-    #     USERNAME: ${{ secrets.NAME }}
-    #   run: |
-    #       git config --local user.email "$EMAIL"
-    #       git config --local user.name "$USERNAME"
-    #       # 检查是否有更新
-    #       git fetch --dry-run origin main || true
-    #       git diff --quiet HEAD origin/main || (
-    #         git pull --rebase
-    #         git add version.txt
-    #         # 使用自定义变量记录提交时间
-    #         CURRENT_DATE=$(date +'%Y-%m-%d %H:%M:%S')
-    #         git commit -m "update $CURRENT_DATE"
-    #       )
+    - name: commit
+      env:
+        EMAIL: ${{ secrets.EMAIL }}
+        USERNAME: ${{ secrets.NAME }}
+      run: |
+          git config --local user.email "$EMAIL"
+          git config --local user.name "$USERNAME"
+          # 检查是否有更新
+          git fetch --dry-run origin main || true
+          git diff --quiet HEAD origin/main || (
+            git pull --rebase
+            git add version.txt
+            # 使用自定义变量记录提交时间
+            CURRENT_DATE=$(date +'%Y-%m-%d %H:%M:%S')
+            git commit -m "update $CURRENT_DATE"
+          )
+          git push
 
 
 
