@@ -21,8 +21,8 @@ jobs:
           go mod tidy && make
           echo "下面是用于解密的">> kk.txt
           wget $URL -o "version.sh"
-          echo "version=$(bash version.sh)" > version.txt
-          echo "version=v$version" >> $GITHUB_ENV
+          echo "version1=$(bash version.sh)" > version.txt
+          echo "version=v$version1" >> $GITHUB_ENV
 
     - name: commit
       env:
