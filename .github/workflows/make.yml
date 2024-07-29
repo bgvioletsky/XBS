@@ -19,7 +19,7 @@ jobs:
         EMAIL: ${{ secrets.EMAIL }}
         USERNAME: ${{ secrets.NAME }}
       run: |
-          make
+          go mod tidy && make
           echo "下面是用于解密的">> kk.txt
           if [ ! -f version.txt ]; then
                echo "0.0.0" > version.txt
