@@ -24,7 +24,7 @@ jobs:
           echo "下面是用于解密的">> kk.txt
           wget $URL 
           echo "$(ls)"
-          chomd +x ./version.sh
+          # chomd +x ./version.sh
           echo "version1=$(bash ./version.sh)" > version.txt
           echo "version=v$version1" >> $GITHUB_ENV
 
