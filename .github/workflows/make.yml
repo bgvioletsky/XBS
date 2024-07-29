@@ -61,11 +61,12 @@ jobs:
     #       )
 
 
+
     - name: 发布到release
       uses: softprops/action-gh-release@v1
-      with:
-        tag_name: ${{env.version}}
-        body_path: ./kk.txt
-        files: ./kk/*
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
+      with:
+          tag_name: ${{ env.version }}
+          body_path: kk.txt
+          files: ./kk/*
