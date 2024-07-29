@@ -17,7 +17,7 @@ jobs:
 
     - name: Build
       run: |
-          go mod tidy && make
+          make
           echo "下面是用于解密的">> kk.txt
           if [ ! -f  version.txt ]; then
                echo "0.0.0" > version.txt
