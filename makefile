@@ -1,4 +1,4 @@
-NAME=xbsrebuild
+NAME=xbs
 BINDIR=kk
 GOBUILD=go build -ldflags '-w -s'
 
